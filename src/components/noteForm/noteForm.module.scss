@@ -1,0 +1,17 @@
+.form{
+  max-width: 600px;
+  margin: auto;
+  padding: 5px;
+  .textField{
+    padding-top: 40px;
+    .tag{
+      margin: 10px;
+    }
+  }
+  .buttons{
+    padding-top: 60px;
+    display: flex;
+    justify-content: center;
+    padding-bottom: 10px;
+  }
+}
