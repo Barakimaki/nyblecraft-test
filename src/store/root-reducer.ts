@@ -1,7 +1,6 @@
 import { combineReducers } from 'redux'
-import notesReducer from "./notes/notes.reducer";
-
+import notesReducer from './notes/notes.reducer'
 
 export const rootReducer = combineReducers({
-    notes: notesReducer
+  notes: notesReducer,
 })
