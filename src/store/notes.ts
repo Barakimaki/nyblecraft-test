@@ -44,5 +44,5 @@ class Notes {
     this.tagFilter = this.tagFilter.filter((tag) => tag !== removedTag)
   }
 }
-
-export default new Notes()
+const notes = new Notes()
+export default notes
