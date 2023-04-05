@@ -1,21 +1,12 @@
 import React, { ChangeEvent, useState } from 'react'
 import Note from '../note/note'
-import { useDispatch, useSelector } from 'react-redux'
-import { selectNotes, selectTagFilter } from '../../store/notes/notes.selector'
-
 import style from './notes.module.scss'
 import { Button, IconButton, Input } from '@mui/material'
 import ClearIcon from '@mui/icons-material/Clear'
-import {
-  addTagToFilter,
-  removeTagFromFilter,
-} from '../../store/notes/notes.action'
+import notesStore from '../../store/notes'
+import { observer } from 'mobx-react-lite'
 
-const Notes = () => {
-  const dispatch = useDispatch()
-
-  const notes = useSelector(selectNotes) || []
-  const tagFilter = useSelector(selectTagFilter) || []
+const Notes = observer(() => {
   const [newTagFilterItem, setNewTagFilterItem] = useState('')
 
   const addNewTagToFilter = () => {
@@ -26,7 +17,7 @@ const Notes = () => {
       } else {
         newTag = '#' + newTagFilterItem
       }
-      dispatch(addTagToFilter(newTag))
+      notesStore.addTagToFilter(newTag)
     }
     setNewTagFilterItem('')
   }
@@ -34,13 +25,13 @@ const Notes = () => {
   return (
     <div className={style.notes}>
       <div className={style.tagFilter}>
-        {tagFilter.map((tag) => (
+        {notesStore.tagFilter.map((tag) => (
           <span key={tag} className={style.tag}>
             {tag}
             <IconButton color="error" title="Удалить">
               <ClearIcon
                 onClick={() => {
-                  dispatch(removeTagFromFilter(tag))
+                  notesStore.removeTagFromFilter(tag)
                 }}
               />
             </IconButton>
@@ -56,13 +47,11 @@ const Notes = () => {
         <Button onClick={addNewTagToFilter}>Добавить тег</Button>
       </div>
       <div className={style.noteList}>
-        {notes
+        {notesStore.notes
           .filter((note) => {
             let flag = true
-            tagFilter.forEach((tag) => {
-              if (note.tags.includes(tag)) {
-                flag = true
-              } else {
+            notesStore.tagFilter.forEach((tag) => {
+              if (!note.tags.includes(tag)) {
                 flag = false
                 return
               }
@@ -81,6 +70,6 @@ const Notes = () => {
       </div>
     </div>
   )
-}
+})
 
-export default Notes;
+export default Notes

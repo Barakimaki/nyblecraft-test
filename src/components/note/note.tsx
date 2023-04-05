@@ -4,11 +4,10 @@ import { CardActions, CardContent } from '@mui/material'
 import IconButton from '@mui/material/IconButton'
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded'
-import { useDispatch } from 'react-redux'
-import { deleteNote } from '../../store/notes/notes.action'
 import Tag from '../tag/tag'
 import { useEffect, useState } from 'react'
 import NoteForm from '../noteForm/noteForm'
+import notesStore from '../../store/notes'
 
 type Props = {
   key: string
@@ -21,7 +20,6 @@ type Props = {
 const Note = ({ id, title, description, tags }: Props) => {
   const [editMode, setEditMode] = useState(false)
 
-  const dispatch = useDispatch()
   const [myDescription, setMyDescription] = useState('')
   useEffect(() => {
     const newDescription = description.replaceAll('#', '')
@@ -55,7 +53,7 @@ const Note = ({ id, title, description, tags }: Props) => {
           color="error"
           title="Удалить"
           onClick={() => {
-            dispatch(deleteNote(id))
+            notesStore.deleteNote(id)
           }}
         >
           <DeleteRoundedIcon />

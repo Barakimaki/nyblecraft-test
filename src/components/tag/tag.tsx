@@ -1,19 +1,16 @@
-import { useDispatch } from 'react-redux'
-import { addTagToFilter } from '../../store/notes/notes.action'
 import style from './tag.module.scss'
+import notesStore from '../../store/notes'
 
 type Props = {
   tag: string
 }
 
 const Tag = ({ tag }: Props) => {
-  const dispatch = useDispatch()
-
   return (
     <span
       className={style.tag}
       onClick={() => {
-        dispatch(addTagToFilter(tag))
+        notesStore.addTagToFilter(tag)
       }}
     >
       {tag}
@@ -21,4 +18,4 @@ const Tag = ({ tag }: Props) => {
   )
 }
 
-export default Tag;
+export default Tag

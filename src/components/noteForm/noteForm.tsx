@@ -1,5 +1,4 @@
 import { ChangeEvent, useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 import {
   Button,
   FormControl,
@@ -7,23 +6,22 @@ import {
   Input,
   TextField,
 } from '@mui/material'
-import { addNote, updateNote } from '../../store/notes/notes.action'
-import { Note } from '../../store/notes/notes.types'
 import { v4 as uuidv4 } from 'uuid'
 import style from './noteForm.module.scss'
 import Tag from '../tag/tag'
-import { selectNote } from '../../store/notes/notes.selector'
+//
+import notesStore, { Note } from '../../store/notes'
+import { observer } from 'mobx-react-lite'
 
 type Props = {
   closeForm: () => void
   id?: string
 }
 
-const NoteForm = ({ closeForm, id = '' }: Props) => {
+const NoteForm = observer(({ closeForm, id = '' }: Props) => {
   let [inputError, setInputError] = useState(false)
 
-  const note = useSelector(selectNote(id))
-
+  const note = notesStore.notes.find((note) => note.id === id)
   const [title, setTitle] = useState(note?.title || '')
   const [description, setDescription] = useState(note?.description || '')
   const [tags, setTags] = useState(note?.tags || ([] as string[]))
@@ -44,8 +42,6 @@ const NoteForm = ({ closeForm, id = '' }: Props) => {
     setTags(newTags)
   }, [description])
 
-  const dispatch = useDispatch()
-
   const updateNoteToNotes = () => {
     if (title.length > 0 && note) {
       const updatedNote: Note = {
@@ -54,7 +50,8 @@ const NoteForm = ({ closeForm, id = '' }: Props) => {
         description: description,
         tags: tags,
       }
-      dispatch(updateNote(updatedNote))
+      console.log(updatedNote)
+      notesStore.updateNote(updatedNote)
       closeForm()
     } else {
       setInputError(true)
@@ -69,7 +66,7 @@ const NoteForm = ({ closeForm, id = '' }: Props) => {
         description: description,
         tags: tags,
       }
-      dispatch(addNote(newNote))
+      notesStore.addNote(newNote)
       closeForm()
     } else {
       setInputError(true)
@@ -132,6 +129,6 @@ const NoteForm = ({ closeForm, id = '' }: Props) => {
       </div>
     </form>
   )
-}
+})
 
-export default NoteForm;
+export default NoteForm
